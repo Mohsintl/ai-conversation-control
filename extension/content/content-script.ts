@@ -2,7 +2,7 @@ import { ClaudeDetector } from '../sources/claude-detector.js';
 import { ChatGPTDetector } from '../sources/chatgpt-detector.js';
 import { GeminiDetector } from '../sources/gemini-detector.js';
 import { PlatformDetector } from '../sources/platform-detector.js';
-import { MessageType } from '../shared/types/messages.js';
+import { HighlightMessage, MessageType, ExtensionMessage } from '../shared/types/messages.js';
 import { Checkpoint } from '../shared/interfaces/checkpoint.js';
 import { generateId } from '../utils/helpers.js';
 
@@ -14,8 +14,11 @@ import { generateId } from '../utils/helpers.js';
 class ContentScript {
   private detector: PlatformDetector | null = null;
   private messageCount = 0;
+  private observationStarted = false;
+  private conversationCheckTimer: number | null = null;
 
   constructor() {
+    this.setupMessageListener();
     this.init();
   }
 
@@ -55,21 +58,26 @@ class ContentScript {
       return;
     }
 
-    // Start observing messages in the page.
-    this.startObserving();
-    
-    // Notify background script that page is loaded.
-    this.notifyPageLoaded();
+    this.ensureObservationReady();
   }
 
   private startObserving(): void {
-    if (!this.detector) return;
+    if (!this.detector || this.observationStarted) return;
 
     // Begin DOM observation to detect user messages.
     console.log('[AI Conversation Control] Starting observation', {
       platform: this.detector.platform,
       conversationId: this.detector.getConversationId()
     });
+
+    const conversationId = this.detector.getConversationId();
+    if (!conversationId) {
+      console.info('[AI Conversation Control] Waiting for conversation context before observing');
+      this.scheduleConversationCheck();
+      return;
+    }
+
+    this.observationStarted = true;
 
     this.detector.observeMessages((message: string, element: HTMLElement) => {
       // Callback for each user message detected by the platform detector.
@@ -160,6 +168,40 @@ class ContentScript {
     }
   }
 
+  private ensureObservationReady(): void {
+    if (!this.detector) return;
+
+    const conversationId = this.detector.getConversationId();
+    if (conversationId) {
+      this.startObserving();
+      this.notifyPageLoaded();
+      return;
+    }
+
+    console.info('[AI Conversation Control] Conversation context not ready, retrying later');
+    this.scheduleConversationCheck();
+  }
+
+  private scheduleConversationCheck(): void {
+    if (this.conversationCheckTimer !== null || !this.detector) {
+      return;
+    }
+
+    this.conversationCheckTimer = window.setInterval(() => {
+      if (!this.detector) {
+        return;
+      }
+
+      const conversationId = this.detector.getConversationId();
+      if (conversationId) {
+        window.clearInterval(this.conversationCheckTimer!);
+        this.conversationCheckTimer = null;
+        this.startObserving();
+        this.notifyPageLoaded();
+      }
+    }, 1000);
+  }
+
   private notifyPageLoaded(): void {
     // Send a non-critical signal that the page is ready.
     console.log('[AI Conversation Control] Notifying page loaded');
@@ -182,6 +224,53 @@ class ContentScript {
     if (this.detector) {
       this.detector.cleanup();
     }
+    if (this.conversationCheckTimer) {
+      window.clearInterval(this.conversationCheckTimer);
+      this.conversationCheckTimer = null;
+    }
+    this.observationStarted = false;
+  }
+
+  private setupMessageListener(): void {
+    chrome.runtime.onMessage.addListener((message: ExtensionMessage) => {
+      if (message.type === MessageType.HIGHLIGHT_MESSAGE) {
+        this.handleHighlightMessage((message as HighlightMessage).data);
+      }
+      return false;
+    });
+  }
+
+  private handleHighlightMessage(data: {
+    checkpointId: string;
+    sequenceNumber?: number;
+    message?: string;
+  }): void {
+    if (!this.detector) return;
+
+    let element: HTMLElement | null = null;
+    if (typeof data.sequenceNumber === 'number') {
+      element = this.detector.findMessageElement(data.sequenceNumber);
+    }
+
+    if (!element) {
+      console.warn('[AI Conversation Control] Highlight target not found', data);
+      return;
+    }
+
+    element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    this.flashHighlight(element);
+  }
+
+  private flashHighlight(element: HTMLElement): void {
+    const previousBoxShadow = element.style.boxShadow;
+    const previousTransition = element.style.transition;
+    element.style.transition = 'box-shadow 0.3s ease';
+    element.style.boxShadow = '0 0 0 3px rgba(16, 163, 127, 0.9)';
+
+    setTimeout(() => {
+      element.style.boxShadow = previousBoxShadow;
+      element.style.transition = previousTransition;
+    }, 1600);
   }
 }
 

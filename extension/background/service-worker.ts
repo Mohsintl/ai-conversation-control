@@ -1,4 +1,5 @@
 import { StorageService } from '../storage/storage-service.js';
+import { Checkpoint } from '../shared/interfaces/checkpoint.js';
 import { MessageType, ExtensionMessage } from '../shared/types/messages.js';
 import { generateId } from '../utils/helpers.js';
 
@@ -171,24 +172,49 @@ class BackgroundService {
   }
 
   private async handleJumpToCheckpoint(checkpointId: string): Promise<void> {
-    // Resolve checkpoint data and navigate to its URL.
     const checkpoint = await StorageService.getCheckpoint(checkpointId);
-    
+
     if (!checkpoint) {
       throw new Error('Checkpoint not found');
     }
 
-    // Open the conversation URL in a new tab or focus existing tab.
-    const tabs = await chrome.tabs.query({ url: checkpoint.url + '*' });
-    
-    if (tabs.length > 0 && tabs[0].id) {
-      // Focus existing tab
-      await chrome.tabs.update(tabs[0].id, { active: true });
-      await chrome.windows.update(tabs[0].windowId!, { focused: true });
-    } else {
-      // Open new tab
-      await chrome.tabs.create({ url: checkpoint.url });
+    const tab = await chrome.tabs.create({ url: checkpoint.url });
+    if (!tab?.id) {
+      console.warn('[Background] Jump tab created without ID');
+      return;
     }
+
+    if (tab.windowId) {
+      await chrome.windows.update(tab.windowId, { focused: true });
+    }
+
+    this.waitForTabToLoadAndHighlight(tab.id, checkpoint);
+  }
+
+  private waitForTabToLoadAndHighlight(tabId: number, checkpoint: Checkpoint): void {
+    const listener = async (updatedTabId: number, changeInfo: chrome.tabs.TabChangeInfo): Promise<void> => {
+      if (updatedTabId !== tabId || changeInfo.status !== 'complete') {
+        return;
+      }
+
+      chrome.tabs.onUpdated.removeListener(listener);
+
+      try {
+        await chrome.tabs.sendMessage(tabId, {
+          type: MessageType.HIGHLIGHT_MESSAGE,
+          timestamp: Date.now(),
+          data: {
+            checkpointId: checkpoint.id,
+            sequenceNumber: checkpoint.sequenceNumber,
+            message: checkpoint.message
+          }
+        });
+      } catch (error) {
+        console.error('[Background] Failed to highlight checkpoint', error);
+      }
+    };
+
+    chrome.tabs.onUpdated.addListener(listener);
   }
 
   private async updateBadge(): Promise<void> {

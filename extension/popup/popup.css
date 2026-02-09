@@ -126,13 +126,14 @@ header h1 {
 
 .content {
   flex: 1;
-  overflow: hidden;
   background: white;
+  display: flex;
+  flex-direction: column;
 }
 
 .tab-content {
   display: none;
-  height: 100%;
+  flex: 1;
   overflow-y: auto;
 }
 
@@ -142,6 +143,9 @@ header h1 {
 
 .list {
   padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .loading {

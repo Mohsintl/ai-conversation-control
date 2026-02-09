@@ -132,6 +132,14 @@ export type PageLoadedMessage = BaseMessage<MessageType.PAGE_LOADED> & {
   };
 };
 
+export type HighlightMessage = BaseMessage<MessageType.HIGHLIGHT_MESSAGE> & {
+  data: {
+    checkpointId: string;
+    sequenceNumber?: number;
+    message?: string;
+  };
+};
+
 /**
  * Response with checkpoints
  */
@@ -196,6 +204,7 @@ export type ExtensionMessage =
   | DeleteCheckpointMessage
   | UpdateCheckpointMessage
   | PageLoadedMessage
+  | HighlightMessage
   | CheckpointsResponseMessage
   | ConversationsResponseMessage
   | SearchResultsMessage
