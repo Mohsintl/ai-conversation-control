@@ -16,6 +16,7 @@ function main() {
   const distExtension = path.join(root, 'dist', 'extension');
   const distPopup = path.join(distExtension, 'popup');
   const distOnboarding = path.join(distExtension, 'onboarding');
+  const distIcons = path.join(distExtension, 'icons');
 
   copyFile(path.join(root, 'extension', 'manifest.json'), distExtension);
   copyFile(path.join(root, 'extension', 'popup', 'popup.html'), distPopup);
@@ -28,6 +29,15 @@ function main() {
     path.join(root, 'extension', 'onboarding', 'onboarding.css'),
     distOnboarding
   );
+
+  // Copy icons
+  if (fs.existsSync(path.join(root, 'extension', 'icons'))) {
+    ensureDir(distIcons);
+    const iconFiles = fs.readdirSync(path.join(root, 'extension', 'icons'));
+    iconFiles.forEach(file => {
+      copyFile(path.join(root, 'extension', 'icons', file), distIcons);
+    });
+  }
 }
 
 main();

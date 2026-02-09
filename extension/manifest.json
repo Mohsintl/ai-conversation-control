@@ -38,8 +38,7 @@
   "web_accessible_resources": [
     {
       "resources": [
-        "tooltip/tooltip.html",
-        "tooltip/tooltip.css"
+        "onboarding/*"
       ],
       "matches": [
         "https://chat.openai.com/*",

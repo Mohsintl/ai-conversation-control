@@ -333,3 +333,61 @@ footer {
 .tab-content::-webkit-scrollbar-thumb:hover {
   background: #ccc;
 }
+
+/* Ad Space Styling */
+.ad-space {
+  padding: 8px 16px;
+  background: #fafafa;
+  border-top: 1px solid #eee;
+  font-size: 11px;
+}
+
+.ad-placeholder {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: white;
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px dashed #ddd;
+  color: #666;
+}
+
+.ad-tag {
+  background: #eee;
+  padding: 1px 4px;
+  border-radius: 3px;
+  font-weight: bold;
+  font-size: 9px;
+  color: #888;
+}
+
+.ad-text {
+  flex: 1;
+}
+
+/* Toast Notification Styling */
+.toast-container {
+  position: absolute;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  pointer-events: none;
+}
+
+.toast {
+  background: #333;
+  color: white;
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 12px;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.toast.visible {
+  opacity: 1;
+  transform: translateY(0);
+}

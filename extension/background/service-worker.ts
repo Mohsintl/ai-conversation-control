@@ -178,14 +178,25 @@ class BackgroundService {
       throw new Error('Checkpoint not found');
     }
 
-    const tab = await chrome.tabs.create({ url: checkpoint.url });
-    if (!tab?.id) {
-      console.warn('[Background] Jump tab created without ID');
-      return;
+    // Attempt to find an existing tab with the same URL.
+    const tabs = await chrome.tabs.query({});
+    const existingTab = tabs.find(t => t.url === checkpoint.url);
+
+    let tab: chrome.tabs.Tab;
+    if (existingTab?.id) {
+      // Focus the existing tab.
+      tab = await chrome.tabs.update(existingTab.id, { active: true });
+      if (tab.windowId) {
+        await chrome.windows.update(tab.windowId, { focused: true });
+      }
+    } else {
+      // Create a new tab.
+      tab = await chrome.tabs.create({ url: checkpoint.url });
     }
 
-    if (tab.windowId) {
-      await chrome.windows.update(tab.windowId, { focused: true });
+    if (!tab?.id) {
+      console.warn('[Background] Jump tab transition failed');
+      return;
     }
 
     this.waitForTabToLoadAndHighlight(tab.id, checkpoint);

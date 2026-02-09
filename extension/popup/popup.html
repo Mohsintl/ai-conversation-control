@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AI Conversation Control</title>
   <link rel="stylesheet" href="popup.css">
 </head>
+
 <body>
   <div class="container">
     <header>
@@ -17,12 +19,7 @@
     </header>
 
     <div class="search-container">
-      <input 
-        type="text" 
-        id="search-input" 
-        placeholder="Search checkpoints..." 
-        autocomplete="off"
-      />
+      <input type="text" id="search-input" placeholder="Search checkpoints..." autocomplete="off" />
       <button id="clear-search" class="icon-button" title="Clear search">×</button>
     </div>
 
@@ -45,6 +42,16 @@
       </div>
     </div>
 
+    <!-- Minimalist Ad Space (Reserved for Carbon/Ethical Ads) -->
+    <div id="ad-container" class="ad-space">
+      <div class="ad-placeholder">
+        <span class="ad-tag">AD</span>
+        <span class="ad-text">Focus on your workflow. Check out these developer tools.</span>
+      </div>
+    </div>
+
+    <div id="toast-container" class="toast-container"></div>
+
     <footer>
       <button id="settings-button" class="footer-button">
         Settings
@@ -57,4 +64,5 @@
 
   <script type="module" src="popup.js"></script>
 </body>
+
 </html>

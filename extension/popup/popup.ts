@@ -129,10 +129,10 @@ class PopupController {
     const checkpointCount = checkpointsResponse.data?.total || 0;
     const conversationCount = conversationsResponse.data?.total || 0;
 
-    document.getElementById('checkpoint-count')!.textContent = 
+    document.getElementById('checkpoint-count')!.textContent =
       `${checkpointCount} checkpoint${checkpointCount !== 1 ? 's' : ''}`;
-    
-    document.getElementById('conversation-count')!.textContent = 
+
+    document.getElementById('conversation-count')!.textContent =
       `${conversationCount} conversation${conversationCount !== 1 ? 's' : ''}`;
   }
 
@@ -178,7 +178,7 @@ class PopupController {
     // Build DOM for a single checkpoint entry.
     const div = document.createElement('div');
     div.className = 'checkpoint-item';
-    
+
     div.innerHTML = `
       <div class="checkpoint-header">
         <span class="platform-badge ${checkpoint.platform}">${checkpoint.platform}</span>
@@ -253,7 +253,7 @@ class PopupController {
     // Build DOM for a single conversation entry.
     const div = document.createElement('div');
     div.className = 'conversation-item';
-    
+
     div.innerHTML = `
       <div class="conversation-header">
         <span class="platform-badge ${conversation.platform}">${conversation.platform}</span>
@@ -287,8 +287,26 @@ class PopupController {
   private copyCheckpoint(checkpoint: Checkpoint): void {
     // Copy checkpoint message text to clipboard.
     navigator.clipboard.writeText(checkpoint.message);
-    // TODO: Show toast notification
-    console.log('Copied to clipboard');
+    this.showToast('Copied to clipboard');
+  }
+
+  private showToast(message: string): void {
+    const container = document.getElementById('toast-container');
+    if (!container) return;
+
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.textContent = message;
+    container.appendChild(toast);
+
+    // Force reflow
+    toast.offsetHeight;
+    toast.classList.add('visible');
+
+    setTimeout(() => {
+      toast.classList.remove('visible');
+      setTimeout(() => toast.remove(), 300);
+    }, 2000);
   }
 
   private async deleteCheckpoint(checkpointId: string): Promise<void> {
@@ -322,10 +340,10 @@ class PopupController {
       exportedAt: new Date().toISOString()
     };
 
-    const blob = new Blob([JSON.stringify(data, null, 2)], { 
-      type: 'application/json' 
+    const blob = new Blob([JSON.stringify(data, null, 2)], {
+      type: 'application/json'
     });
-    
+
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;

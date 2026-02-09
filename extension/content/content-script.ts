@@ -138,8 +138,8 @@ class ContentScript {
     const indicator = document.createElement('div');
     indicator.innerHTML = `
       <div style="display: flex; align-items: center; gap: 8px;">
-        <span style="font-size: 16px;">✨</span>
-        <span style="font-weight: 500;">Checkpoint Saved</span>
+        <span style="font-size: 16px;">📍</span>
+        <span style="font-weight: 500;">State Checkpoint Created</span>
       </div>
     `;
     indicator.style.cssText = `
