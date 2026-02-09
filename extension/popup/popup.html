@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Conversation Control</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>AI Conversation Control</h1>
+      <div class="stats">
+        <span id="checkpoint-count">0 checkpoints</span>
+        <span id="conversation-count">0 conversations</span>
+      </div>
+    </header>
+
+    <div class="search-container">
+      <input 
+        type="text" 
+        id="search-input" 
+        placeholder="Search checkpoints..." 
+        autocomplete="off"
+      />
+      <button id="clear-search" class="icon-button" title="Clear search">×</button>
+    </div>
+
+    <div class="tabs">
+      <button class="tab active" data-tab="checkpoints">Checkpoints</button>
+      <button class="tab" data-tab="conversations">Conversations</button>
+    </div>
+
+    <div class="content">
+      <div id="checkpoints-tab" class="tab-content active">
+        <div id="checkpoints-list" class="list">
+          <div class="loading">Loading checkpoints...</div>
+        </div>
+      </div>
+
+      <div id="conversations-tab" class="tab-content">
+        <div id="conversations-list" class="list">
+          <div class="loading">Loading conversations...</div>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <button id="settings-button" class="footer-button">
+        Settings
+      </button>
+      <button id="export-button" class="footer-button">
+        Export Data
+      </button>
+    </footer>
+  </div>
+
+  <script type="module" src="popup.js"></script>
+</body>
+</html>
