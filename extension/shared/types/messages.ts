@@ -7,7 +7,7 @@ export enum MessageType {
   // From content script to background
   CHECKPOINT_CAPTURED = 'checkpoint_captured',
   PAGE_LOADED = 'page_loaded',
-  
+
   // From popup to background
   GET_CHECKPOINTS = 'get_checkpoints',
   GET_CONVERSATIONS = 'get_conversations',
@@ -15,10 +15,10 @@ export enum MessageType {
   DELETE_CHECKPOINT = 'delete_checkpoint',
   UPDATE_CHECKPOINT = 'update_checkpoint',
   JUMP_TO_CHECKPOINT = 'jump_to_checkpoint',
-  
+
   // From background to content script
   HIGHLIGHT_MESSAGE = 'highlight_message',
-  
+
   // Responses
   CHECKPOINTS_RESPONSE = 'checkpoints_response',
   CONVERSATIONS_RESPONSE = 'conversations_response',
@@ -43,7 +43,7 @@ export type CheckpointCapturedMessage = BaseMessage<
   MessageType.CHECKPOINT_CAPTURED
 > & {
   data: {
-    checkpoint: Omit<Checkpoint, 'id'>;
+    checkpoint: Checkpoint;
   };
 };
 

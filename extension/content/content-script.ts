@@ -28,7 +28,7 @@ class ContentScript {
       href: window.location.href,
       hostname: window.location.hostname
     });
-    
+
     // Detect which platform we're on.
     const detectors = [
       new ClaudeDetector(),
@@ -79,17 +79,18 @@ class ContentScript {
 
     this.observationStarted = true;
 
-    this.detector.observeMessages((message: string, element: HTMLElement) => {
+    this.detector.observeMessages((message: string, element: HTMLElement, messageId: string) => {
       // Callback for each user message detected by the platform detector.
       console.log('[AI Conversation Control] User message detected', {
         preview: message.substring(0, 80),
-        length: message.length
+        length: message.length,
+        messageId
       });
-      this.captureCheckpoint(message, element);
+      this.captureCheckpoint(message, element, messageId);
     });
   }
 
-  private captureCheckpoint(message: string, element: HTMLElement): void {
+  private captureCheckpoint(message: string, element: HTMLElement, messageId: string): void {
     if (!this.detector) return;
 
     // Extract conversation ID for the current page.
@@ -101,7 +102,8 @@ class ContentScript {
       return;
     }
 
-    const checkpoint: Omit<Checkpoint, 'id'> = {
+    const checkpoint: Omit<Checkpoint, 'id'> & { id: string } = {
+      id: messageId,
       platform: this.detector.platform,
       conversationId,
       message,
@@ -132,40 +134,47 @@ class ContentScript {
   }
 
   private showCheckpointFeedback(element: HTMLElement): void {
-    // Add a subtle visual indicator that the message was captured.
+    // Add a premium toast notification that the message was captured.
     const indicator = document.createElement('div');
-    indicator.textContent = '✓';
-    indicator.style.cssText = `
-      position: absolute;
-      top: 5px;
-      right: 5px;
-      color: #10a37f;
-      font-size: 12px;
-      opacity: 0;
-      transition: opacity 0.3s;
-      pointer-events: none;
+    indicator.innerHTML = `
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span style="font-size: 16px;">✨</span>
+        <span style="font-weight: 500;">Checkpoint Saved</span>
+      </div>
     `;
-    
-    const container = element.closest('[data-message-id], .message') as HTMLElement;
-    if (container) {
-      const rect = container.getBoundingClientRect();
-      indicator.style.position = 'fixed';
-      indicator.style.top = `${rect.top + 5}px`;
-      indicator.style.right = `${window.innerWidth - rect.right + 5}px`;
-      
-      document.body.appendChild(indicator);
-      
-      // Fade in.
-      setTimeout(() => {
-        indicator.style.opacity = '1';
-      }, 10);
-      
-      // Fade out and remove.
-      setTimeout(() => {
-        indicator.style.opacity = '0';
-        setTimeout(() => indicator.remove(), 300);
-      }, 2000);
-    }
+    indicator.style.cssText = `
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 12px 20px;
+      border-radius: 12px;
+      font-size: 14px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      z-index: 10000;
+      pointer-events: none;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    `;
+
+    document.body.appendChild(indicator);
+
+    // Force reflow for transition
+    indicator.offsetHeight;
+
+    // Slide in
+    indicator.style.transform = 'translateY(0)';
+    indicator.style.opacity = '1';
+
+    // Slide out and remove.
+    setTimeout(() => {
+      indicator.style.transform = 'translateY(20px)';
+      indicator.style.opacity = '0';
+      setTimeout(() => indicator.remove(), 500);
+    }, 3000);
   }
 
   private ensureObservationReady(): void {

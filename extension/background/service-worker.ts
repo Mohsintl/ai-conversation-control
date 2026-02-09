@@ -15,7 +15,7 @@ class BackgroundService {
   private init(): void {
     // Bootstraps listeners for messaging and lifecycle events.
     console.log('[AI Conversation Control] Background service initialized');
-    
+
     // Listen for messages from content scripts and popup.
     chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       // Handle messages asynchronously; return true to keep the port open.
@@ -155,17 +155,17 @@ class BackgroundService {
   }
 
   private async handleCheckpointCaptured(
-    checkpoint: Omit<import('../shared/interfaces/checkpoint.js').Checkpoint, 'id'>
+    checkpoint: import('../shared/interfaces/checkpoint.js').Checkpoint
   ): Promise<void> {
-    // Assign a unique ID and persist.
-    // Add ID and save
-    const fullCheckpoint = {
-      ...checkpoint,
-      id: generateId()
-    };
+    // Check for existing checkpoint with same ID to avoid duplicates.
+    const existing = await StorageService.getCheckpoint(checkpoint.id);
+    if (existing) {
+      console.log('[Background] Checkpoint already exists, skipping:', checkpoint.id);
+      return;
+    }
 
-    await StorageService.saveCheckpoint(fullCheckpoint);
-    console.log('[Background] Checkpoint saved:', fullCheckpoint.id);
+    await StorageService.saveCheckpoint(checkpoint);
+    console.log('[Background] Checkpoint saved:', checkpoint.id);
 
     // Show badge to indicate a new checkpoint was saved.
     await this.updateBadge();
@@ -221,7 +221,7 @@ class BackgroundService {
     // Badge shows total number of checkpoints.
     const stats = await StorageService.getStorageStats();
     const badgeText = stats.checkpointCount > 0 ? stats.checkpointCount.toString() : '';
-    
+
     await chrome.action.setBadgeText({ text: badgeText });
     await chrome.action.setBadgeBackgroundColor({ color: '#10a37f' });
   }
@@ -229,7 +229,7 @@ class BackgroundService {
   private async handleInstall(): Promise<void> {
     // Open onboarding page on first install.
     console.log('[Background] Extension installed');
-    
+
     // Open onboarding page
     await chrome.tabs.create({
       url: chrome.runtime.getURL('onboarding/onboarding.html')

@@ -43,8 +43,11 @@ header h1 {
 .search-container {
   position: relative;
   padding: 12px 16px;
-  background: white;
-  border-bottom: 1px solid #e0e0e0;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(224, 224, 224, 0.5);
+  z-index: 10;
 }
 
 #search-input {
@@ -83,7 +86,7 @@ header h1 {
   color: #666;
 }
 
-#search-input:not(:placeholder-shown) ~ #clear-search {
+#search-input:not(:placeholder-shown)~#clear-search {
   display: flex;
 }
 
@@ -122,6 +125,7 @@ header h1 {
   right: 0;
   height: 2px;
   background: #667eea;
+  transition: all 0.3s ease;
 }
 
 .content {
@@ -203,16 +207,19 @@ header h1 {
 .platform-badge.claude {
   background: #f3e8ff;
   color: #7c3aed;
+  box-shadow: 0 1px 2px rgba(124, 58, 237, 0.1);
 }
 
 .platform-badge.chatgpt {
   background: #dcfce7;
   color: #16a34a;
+  box-shadow: 0 1px 2px rgba(22, 163, 74, 0.1);
 }
 
 .platform-badge.gemini {
   background: #dbeafe;
   color: #2563eb;
+  box-shadow: 0 1px 2px rgba(37, 99, 235, 0.1);
 }
 
 .timestamp {
@@ -226,6 +233,7 @@ header h1 {
   color: #333;
   display: -webkit-box;
   -webkit-line-clamp: 3;
+  line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
