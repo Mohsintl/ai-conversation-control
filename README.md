@@ -2,13 +2,15 @@
 
 A browser extension that adds a control and recovery layer for generative AI conversations. Automatically captures user messages as checkpoints, enabling search and jump-back functionality when AI responses drift or hallucinate.
 
+> **Status:** early MVP. Capture, search, and jump-back work on ChatGPT and Claude; see [`MVP_CHECKLIST.md`](MVP_CHECKLIST.md) for what is still open.
+
 ## Features
 
 - 🎯 **Automatic Checkpoint Capture**: Every message you send is saved locally
 - 🔍 **Search Functionality**: Quickly find past messages across all conversations
 - ↩️ **Jump Back**: Return to any checkpoint in the original conversation
 - 🔒 **Privacy First**: All data stored locally, no cloud sync
-- 🤖 **Multi-Platform**: Works with Claude, ChatGPT, and Gemini
+- 🤖 **Multi-Platform**: Works with ChatGPT and Claude; Gemini is planned
 
 ## Installation
 
@@ -16,7 +18,7 @@ A browser extension that adds a control and recovery layer for generative AI con
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/ai-conversation-control.git
+git clone https://github.com/Mohsintl/ai-conversation-control.git
 cd ai-conversation-control
 ```
 
@@ -39,7 +41,7 @@ npm run build
 ## Usage
 
 1. Install the extension
-2. Visit any supported AI platform (Claude.ai, ChatGPT, or Gemini)
+2. Visit a supported AI platform (ChatGPT or Claude.ai)
 3. Start a conversation - your messages are automatically saved as checkpoints
 4. Click the extension icon to:
    - View all checkpoints
@@ -156,7 +158,7 @@ MIT License - see [LICENSE](LICENSE) for details
 
 ## Support
 
-- [GitHub Issues](https://github.com/yourusername/ai-conversation-control/issues)
+- [GitHub Issues](https://github.com/Mohsintl/ai-conversation-control/issues)
 - [Documentation](docs/)
 
 ---

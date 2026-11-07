@@ -12,7 +12,7 @@
 
 1. Clone and install:
 ```bash
-git clone https://github.com/yourusername/ai-conversation-control.git
+git clone https://github.com/Mohsintl/ai-conversation-control.git
 cd ai-conversation-control
 npm install
 ```

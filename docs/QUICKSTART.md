@@ -6,7 +6,7 @@ Get up and running with AI Conversation Control in 5 minutes.
 
 ### Step 1: Download or Clone
 ```bash
-git clone https://github.com/yourusername/ai-conversation-control.git
+git clone https://github.com/Mohsintl/ai-conversation-control.git
 cd ai-conversation-control
 ```
 
@@ -133,9 +133,9 @@ Currently supports Claude, ChatGPT, and Gemini. More platforms coming soon!
 
 Need help?
 - 📖 [Read the docs](DEVELOPMENT.md)
-- 🐛 [Report a bug](https://github.com/yourusername/ai-conversation-control/issues)
-- 💡 [Request a feature](https://github.com/yourusername/ai-conversation-control/issues)
-- 💬 [Join discussions](https://github.com/yourusername/ai-conversation-control/discussions)
+- 🐛 [Report a bug](https://github.com/Mohsintl/ai-conversation-control/issues)
+- 💡 [Request a feature](https://github.com/Mohsintl/ai-conversation-control/issues)
+- 💬 [Join discussions](https://github.com/Mohsintl/ai-conversation-control/discussions)
 
 ---
 

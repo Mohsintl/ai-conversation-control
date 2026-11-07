@@ -13,7 +13,7 @@ Thank you for your interest in contributing! This document provides guidelines a
 
 ### Reporting Bugs
 
-1. Check if the bug has already been reported in [Issues](https://github.com/yourusername/ai-conversation-control/issues)
+1. Check if the bug has already been reported in [Issues](https://github.com/Mohsintl/ai-conversation-control/issues)
 2. If not, create a new issue with:
    - Clear, descriptive title
    - Steps to reproduce
@@ -24,7 +24,7 @@ Thank you for your interest in contributing! This document provides guidelines a
 
 ### Suggesting Features
 
-1. Check [existing feature requests](https://github.com/yourusername/ai-conversation-control/issues?q=is%3Aissue+is%3Aopen+label%3Aenhancement)
+1. Check [existing feature requests](https://github.com/Mohsintl/ai-conversation-control/issues?q=is%3Aissue+is%3Aopen+label%3Aenhancement)
 2. Create a new issue with:
    - Clear description of the feature
    - Why it would be useful
@@ -249,8 +249,8 @@ When adding features, update:
 
 ## Questions?
 
-- 💬 Open a [Discussion](https://github.com/yourusername/ai-conversation-control/discussions)
-- 🐛 Create an [Issue](https://github.com/yourusername/ai-conversation-control/issues)
+- 💬 Open a [Discussion](https://github.com/Mohsintl/ai-conversation-control/discussions)
+- 🐛 Create an [Issue](https://github.com/Mohsintl/ai-conversation-control/issues)
 - 📧 Email: your.email@example.com
 
 ## Recognition

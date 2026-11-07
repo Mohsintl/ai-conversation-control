@@ -13,7 +13,7 @@ Before you begin, ensure you have:
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/yourusername/ai-conversation-control.git
+git clone https://github.com/Mohsintl/ai-conversation-control.git
 cd ai-conversation-control
 ```
 
@@ -171,7 +171,7 @@ Popup logs:
 
 If you encounter issues:
 1. Check this guide first
-2. Search [GitHub Issues](https://github.com/yourusername/ai-conversation-control/issues)
+2. Search [GitHub Issues](https://github.com/Mohsintl/ai-conversation-control/issues)
 3. Create a new issue with:
    - Your OS and Chrome version
    - Steps to reproduce
