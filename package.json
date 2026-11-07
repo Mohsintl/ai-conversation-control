@@ -1,0 +1,27 @@
+{
+  "name": "ai-conversation-control",
+  "version": "0.1.0",
+  "description": "Browser-based control and recovery layer for generative AI conversations",
+  "scripts": {
+    "build": "tsc && npm run bundle-content && npm run copy-assets",
+    "copy-assets": "node scripts/copy-assets.js",
+    "bundle-content": "node scripts/bundle-content.js",
+    "watch": "tsc --watch",
+    "clean": "node -e \"require('fs').rmSync('dist', { recursive: true, force: true })\""
+  },
+  "devDependencies": {
+    "@types/chrome": "^0.0.268",
+    "esbuild": "^0.20.2",
+    "typescript": "^5.3.3"
+  },
+  "keywords": [
+    "ai",
+    "chatgpt",
+    "claude",
+    "conversation",
+    "checkpoint",
+    "chrome-extension"
+  ],
+  "author": "",
+  "license": "MIT"
+}
